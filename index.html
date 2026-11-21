@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102b63">
+  <title>WatchPayMoney</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{--blue:#155eef;--green:#09b981;--ink:#15213b;--muted:#65738b;--bg:#f2f6ff}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
+    .wrap{max-width:520px;margin:auto;padding:14px 14px 90px}
+    .hero{padding:24px 20px;border-radius:22px;color:white;background:linear-gradient(130deg,#087cf5,#2525c9 70%,#652be8);box-shadow:0 10px 28px #1b4dcc30}
+    .hero h1{margin:0 0 7px;font-size:28px}.hero p{margin:0;opacity:.9}
+    .user{margin:14px 0;background:white;border-radius:18px;padding:15px;display:flex;align-items:center;gap:12px}
+    .avatar{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;background:#e4efff;font-size:23px}
+    .muted{color:var(--muted);font-size:13px;margin-top:4px}
+    .balance{background:linear-gradient(110deg,#08a96f,#08c99c);border-radius:20px;color:white;padding:20px;margin:14px 0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .balance small{display:block;opacity:.9}.amount{font-size:30px;font-weight:800;margin-top:5px}
+    button{border:0;border-radius:13px;padding:12px 15px;font-weight:700;cursor:pointer}
+    .white{background:white;color:#087c60}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+    .tile{background:white;border-radius:17px;padding:17px 14px;text-align:left;min-height:112px;color:var(--ink);border:1px solid #e7ecf5}
+    .tile b{display:block;margin:8px 0 4px;font-size:16px}.tile span{font-size:13px;color:var(--muted)}
+    .tile .ico{font-size:25px}.section{margin-top:20px}.section h2{font-size:19px}
+    .panel{background:white;border-radius:17px;padding:16px;margin-top:10px}
+    .hidden{display:none}.back{background:#eaf0ff;color:#194fc7;margin-bottom:12px}
+    .task{border:1px solid #e8edf6;border-radius:13px;padding:13px;margin:10px 0}
+    .task button{background:#155eef;color:white;margin-top:9px}
+    input{width:100%;padding:13px;border:1px solid #dce3ef;border-radius:12px;margin:8px 0;font-size:15px}
+    .notice{font-size:12px;color:var(--muted);line-height:1.5}
+    nav{position:fixed;bottom:0;left:0;right:0;max-width:520px;margin:auto;background:#fff;border-top:1px solid #e5eaf2;display:flex;justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom))}
+    nav button{background:none;color:#596985;padding:7px 8px;font-size:12px} nav button.active{color:#155eef}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero"><h1>WatchPayMoney</h1><p>Watch • Complete tasks • Earn rewards</p></header>
+  <div class="user"><div class="avatar">👤</div><div><b id="userName">Welcome!</b><div class="muted" id="userId">Telegram Mini App demo</div></div></div>
+
+  <main id="home">
+    <section class="balance"><div><small>Your available balance</small><div class="amount">$0.00 <small style="display:inline">USDT</small></div><small>Demo balance — no real funds</small></div><button class="white" onclick="showPage('withdraw')">Withdraw</button></section>
+    <div class="grid">
+      <button class="tile" onclick="showPage('videos')"><div class="ico">🎬</div><b>Watch Videos</b><span>Available video offers</span></button>
+      <button class="tile" onclick="showPage('tasks')"><div class="ico">✅</div><b>Tasks</b><span>Complete sponsored tasks</span></button>
+      <button class="tile" onclick="showPage('referral')"><div class="ico">👥</div><b>Referral</b><span>Invite friends</span></button>
+      <button class="tile" onclick="showPage('history')"><div class="ico">📄</div><b>History</b><span>View account activity</span></button>
+    </div>
+    <p class="notice">Rewards are added only after a task is verified and funded by a sponsor. This preview does not pay money.</p>
+  </main>
+
+  <section id="videos" class="hidden"><button class="back" onclick="showPage('home')">← Back</button><h2>🎬 Watch Videos</h2><div class="panel"><p>No sponsored videos are available yet.</p><p class="notice">Videos and reward amounts will appear here after the administrator adds verified offers.</p></div></section>
+  <section id="tasks" class="hidden"><button class="back" onclick="showPage('home')">← Back</button><h2>✅ Tasks</h2><div class="panel"><p>No tasks available yet.</p><p class="notice">Only genuine, sponsor-funded tasks will be listed here.</p></div></section>
+  <section id="referral" class="hidden"><button class="back" onclick="showPage('home')">← Back</button><h2>👥 Invite Friends</h2><div class="panel"><p>Your personal referral link will appear after the bot backend is connected.</p><p class="notice">Referral rewards will be granted only for eligible, verified users.</p></div></section>
+  <section id="withdraw" class="hidden"><button class="back" onclick="showPage('home')">← Back</button><h2>💵 USDT Withdrawal</h2><div class="panel"><p>Withdrawal requests are not enabled in this demo.</p><label>TRC20 wallet address</label><input placeholder="Enter your USDT TRC20 address" disabled><label>Amount (USDT)</label><input placeholder="Minimum withdrawal set by admin" disabled><p class="notice">Never share your wallet seed phrase or private key. Real withdrawals will be enabled only after secure backend and admin verification are configured.</p></div></section>
+  <section id="history" class="hidden"><button class="back" onclick="showPage('home')">← Back</button><h2>📄 Transaction History</h2><div class="panel">No transactions yet.</div></section>
+</div>
+<nav>
+  <button class="active" onclick="showPage('home',this)">⌂<br>Home</button>
+  <button onclick="showPage('videos',this)">▶<br>Videos</button>
+  <button onclick="showPage('tasks',this)">✓<br>Tasks</button>
+  <button onclick="showPage('referral',this)">♧<br>Invite</button>
+</nav>
+<script>
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready(); tg.expand();
+    const u = tg.initDataUnsafe?.user;
+    if (u) {
+      document.getElementById('userName').textContent = [u.first_name,u.last_name].filter(Boolean).join(' ') || 'User';
+      document.getElementById('userId').textContent = 'Telegram user';
+    }
+  }
+  function showPage(id,btn){
+    document.querySelectorAll('main, .wrap > section').forEach(el=>el.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    document.querySelectorAll('nav button').forEach(el=>el.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    if(tg) tg.HapticFeedback?.impactOccurred('light');
+  }
+</script>
+</body>
+</html>
